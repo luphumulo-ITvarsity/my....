@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Received Messages</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 900px;
+      margin: 40px auto;
+      padding: 0 20px;
+      background: #f9f9f9;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #fff;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    th, td {
+      padding: 12px 15px;
+      border-bottom: 1px solid #ddd;
+      text-align: left;
+    }
+    th {
+      background: #4CAF50;
+      color: white;
+    }
+    tr:hover {
+      background: #f1f1f1;
+    }
+    .no-messages {
+      text-align: center;
+      margin-top: 50px;
+      color: #555;
+    }
+  </style>
+</head>
+<body>
+  <h1>Received Messages</h1>
+  <table id="messages-table">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Message</th>
+        <th>Received At</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <div class="no-messages" style="display:none;">No messages found.</div>
+
+  <script>
+    async function fetchMessages() {
+      try {
+        const response = await fetch('http://localhost:5000/messages');
+        if (!response.ok) throw new Error('Network response was not ok');
+
+        const messages = await response.json();
+        const tbody = document.querySelector('#messages-table tbody');
+        const noMessagesDiv = document.querySelector('.no-messages');
+
+        tbody.innerHTML = ''; // Clear previous rows
+
+        if (messages.length === 0) {
+          noMessagesDiv.style.display = 'block';
+          document.getElementById('messages-table').style.display = 'none';
+          return;
+        }
+
+        noMessagesDiv.style.display = 'none';
+        document.getElementById('messages-table').style.display = 'table';
+
+        messages.forEach((msg, index) => {
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td>${index + 1}</td>
+            <td>${msg.name}</td>
+            <td><a href="mailto:${msg.email}">${msg.email}</a></td>
+            <td>${msg.message.replace(/\n/g, '<br>')}</td>
+            <td>${new Date(msg.created_at).toLocaleString()}</td>
+          `;
+          tbody.appendChild(tr);
+        });
+      } catch (error) {
+        alert('Failed to load messages.');
+        console.error(error);
+      }
+    }
+
+    fetchMessages();
+  </script>
+</body>
+</html>

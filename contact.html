@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contact - Luphumulo Mduna</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" />
+</head>
+<body>
+
+  <!-- Header -->
+  <div class="hero-header">
+    <div class="wrapper">
+      <header>
+        <div class="logo">
+          <i class="fa-solid fa-l"></i>
+          <div class="logo-text">Luphumulo Mduna</div>
+        </div>
+        <nav>
+          <div class="togglebtn">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+          <ul class="navlinks">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="#">Portfolio</a></li>
+            <li><a href="#">Resume</a></li>
+            <li><a href="blog.html">Blog</a></li>
+            <li><a href="contact.html" class="active">Contact</a></li>
+          </ul>
+        </nav>
+      </header>
+      <div class="wrapper">
+      <h2 class="section-title">📬 Get in Touch</h2>
+      <p class="intro-text" style="margin-bottom: 40px;">
+        Whether you want to collaborate, have questions, or just want to say hi — feel free to send me a message. I’m always open to opportunities and meaningful conversations.
+      </p>
+<form class="contact-form animated-form">
+  <input type="text" name="name" placeholder="Your Name" required class="animated-input" />
+  <input type="email" name="email" placeholder="Your Email" required class="animated-input" />
+  <textarea name="message" rows="6" placeholder="Your Message" required class="animated-input"></textarea>
+  <button type="submit" class="btn animated-btn">Send Message</button>
+</form>
+
+      <div class="social" style="margin-top: 30px;">
+        <a href="https://www.facebook.com/profile.php?id=61560478104081"><i class="fa-brands fa-facebook"></i></a>
+        <a href="https://za.linkedin.com/in/luphumulo-mduna-b13213303"><i class="fa-brands fa-linkedin"></i></a>
+      </div>
+    </div>
+  
+
+  <!-- Footer -->
+  <footer style="text-align: center; padding: 20px; background: #111; color: #fff;">
+    &copy; 2025 Luphumulo Mduna | All Rights Reserved
+  </footer>
+
+  <!-- Scripts -->
+  <script>
+    var togglebtn = document.querySelector(".togglebtn");
+    var nav = document.querySelector(".navlinks");
+
+    togglebtn.addEventListener("click", function () {
+      this.classList.toggle("click");
+      nav.classList.toggle("open");
+    });
+  </script>
+  <script>
+    
+    const form = document.querySelector('form');
+
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
+
+  const name = form.name.value;
+  const email = form.email.value;
+  const message = form.message.value;
+
+  try {
+    const res = await fetch('http://localhost:5000/contact', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, email, message }),
+    });
+
+    const text = await res.text();
+    alert(text);
+    form.reset();
+  } catch (error) {
+    alert('Failed to send message');
+  }
+});
+const form = document.querySelector('form');
+const submitBtn = form.querySelector('button[type="submit"]');
+
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
+
+  submitBtn.disabled = true;
+  submitBtn.textContent = 'Sending...';
+
+  const name = form.name.value;
+  const email = form.email.value;
+  const message = form.message.value;
+
+  try {
+    const res = await fetch('http://localhost:5000/contact', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, email, message }),
+    });
+
+    const text = await res.text();
+    alert(text);
+    form.reset();
+  } catch (error) {
+    alert('Failed to send message');
+  } finally {
+    submitBtn.disabled = false;
+    submitBtn.textContent = 'Send Message';
+  }
+});
+
+  </script>
+</body>
+</html>
